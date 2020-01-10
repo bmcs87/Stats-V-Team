@@ -1,0 +1,66 @@
+######### Graphing Data Points 
+
+##CSV
+setwd("C:/Users/resmi/Documents")
+data <- read.csv("datapoints.csv")
+plot(data$price ~ data$year, pch=20)
+
+##txt
+setwd("C:/Users/resmi/Documents")
+data <- read.delim("datapoints.txt")
+plot(data$price ~ data$year, pch=20)
+
+
+######## Graphing Residuals
+fit <- lm(data$price ~ data$year)
+par(mfrow = c(1,1))
+plot(fit)
+
+
+######## Graphing QQ Plot
+par(mfrow = c(2,1))
+plot(fit)
+
+
+####### Log Log
+trade <- read.csv("imports.csv")
+plot(trade$IMPORTS, trade$GDP, col=0, xlim=c(0,1300))
+text(trade$IMPORTS, trade$GDP, labels=trade$Country)
+plot(log(trade$IMPORTS), log(trade$GDP), col=0, xlim=c(-2.5, 9))
+text(log(trade$IMPORTS), log(trade$GDP), labels=trade$Country)
+
+
+########## Polynomials
+#graphing
+telemkt <- read.csv("telemarketing.csv")
+tele1 <- lm(telemkt$calls~telemkt$months)
+xgrid <- data.frame(telemkt$months[10:30])
+par(mfrow=c(1,2))
+plot(telemkt$calls ~ telemkt$months, pch=20, col=4)
+e <- telemkt$calls - tele1$fitted.values
+plot(telemkt$months, e, pch=20, col=4, ylab="residuals")
+abline(h=0, lty=2)
+
+#testing for quadratic term
+months2 <- telemkt$months^2
+tele2 <- lm(telemkt$calls ~ telemkt$months + months2)
+summary(tele2)
+
+
+######## Multicollinearity
+#Regressing together
+supervisor <- read.csv("supervisor.csv")
+supervisor_lm <- lm(supervisor$Y ~ supervisor$X2 + supervisor$X3 + supervisor$X4)
+summary(supervisor_lm)
+
+#Regressing separately
+summary(lm(supervisor$Y ~ supervisor$X2))
+summary(lm(supervisor$Y ~ supervisor$X3))
+summary(lm(supervisor$Y ~ supervisor$X4))
+
+
+########  Removing outliers
+temp <- read.delim("temp.txt")
+plot(temp$temperature ~ temp$date, pch=20)
+new_temp <- temp[-c(6),] 
+plot(new_temp$temperature ~ new_temp$date, pch=20)
