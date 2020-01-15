@@ -59,6 +59,21 @@ summary(lm(supervisor$Y ~ supervisor$X3))
 summary(lm(supervisor$Y ~ supervisor$X4))
 
 
+
+########  Heteroscedasticity
+trucks <- read.csv("trucks.csv")
+trucks_regression <- lm(trucks$price ~ trucks$year)
+coef(summary(trucks_regression)
+
+##Now, accounting for nonconstant variance (heteroscedasticity)
+install.packages("lmtest")
+install.packages("sandwich")
+library(lmtest)
+library(sandwich)
+Coeftest(trucks_regression, vcov = vcovHC)
+
+
+
 ########  Removing outliers
 temp <- read.delim("temp.txt")
 plot(temp$temperature ~ temp$date, pch=20)
